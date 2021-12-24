@@ -171,3 +171,32 @@ bot.roleDeleteCommand({
 bot.onRoleDelete()
 
 //Emoji log
+bot.emojiCreateCommand({
+  channel:"$getServerVar[log]",
+  code:`
+  $author[$newEmoji[name];$newEmoji[url]]
+  $description[$newEmoji[emoji] Emojisi eklendi.
+  
+Emoji adı: **$newEmoji[name]**
+
+Emoji linki: **[Tıkla]($newEmoji[url])**]
+  $footer[ID: $newEmoji[id] $addTimestamp]
+  $thumbnail[$newEmoji[url]]
+  $color[$getServerVar[hex]]
+  `
+  })
+bot.onEmojiCreate()
+
+bot.emojiDeleteCommand({
+  channel:"$getServerVar[log]",
+  code:`
+  $author[$oldEmoji[name];$oldEmoji[url]]
+  $description[**$oldEmoji[name]** Adlı emoji silindi.
+
+Emoji linki: **[Tıkla]($oldEmoji[url])**]
+  $footer[$serverName $addTimestamp]
+  $thumbnail[$oldEmoji[url]]
+  $color[$getServerVar[hex]]
+  `
+  })
+bot.onEmojiDelete()
