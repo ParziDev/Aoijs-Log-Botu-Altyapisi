@@ -200,3 +200,31 @@ Emoji linki: **[Tıkla]($oldEmoji[url])**]
   `
   })
 bot.onEmojiDelete()
+
+//Ses log
+bot.voiceStateUpdateCommand({
+  channel:"$getServerVar[log]",
+  code:`
+$author[$newState[id];$userAvatar[$newState[id]]]
+$description[**$newState[id]** adlı kullanıcı <#$newState[channelID]> adlı ses kanalına giriş yaptı.]
+$footer[ID: $newState[id] $addTimestamp]
+$thumbnail[$userAvatar[$newState[id]]]
+$color[$getServerVar[hex]]
+$onlyIf[$newState[channelID]!=;]
+$onlyIf[$newState[channelID]==;]
+`
+})
+
+bot.voiceStateUpdateCommand({
+  channel:"$getServerVar[log]",
+  code:`
+$author[$newState[id];$userAvatar[$newState[id]]]
+$description[**$newState[id]** adlı kullanıcı <#$newState[channelID]> adlı ses kanalından çıkış yaptı.]
+$footer[ID: $newState[id] $addTimestamp]
+$thumbnail[$userAvatar[$newState[id]]]
+$color[$getServerVar[hex]]
+$onlyIf[$newState[channelID]==;]
+$onlyIf[$newState[channelID]!=;]
+`
+})
+bot.onVoiceStateUpdate()
