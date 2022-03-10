@@ -1,15 +1,16 @@
 module.exports = {
   name:"log",
+  $if:"v4",
   code:`
   $if[$message[1]==ayarla]
-  $reply[$messageID;✅ Log ayarlandı!;yes]
+  ✅ Log ayarlandı!
   $setServerVar[log;$mentionedChannels[1]]
-  $onlyIf[$mentionedChannels[1]!=;❎ Log kanalını etiketleyin.]
+  $onlyIf[$mentionedChannels[1]!=undefined;❎ Log kanalını etiketleyin.]
   $onlyIf[$getServerVar[log]==;❎ Log zaten ayarlanmış.]
   $endif
  
   $if[$message[1]==sıfırla]
-  $reply[$messageID;✅ Log sıfırlandı!;yes]
+  ✅ Log sıfırlandı!
   $setServerVar[log;]
   $onlyIf[$getServerVar[log]!=;❎ Log zaten ayarlanmamış.]
   $endif
