@@ -1,19 +1,12 @@
-const parzi = require("aoi.js")
-var fs = require('fs')
-const bot = new parzi.Bot({
-    token: process.env.token,//.env dosyasında token yazan variablenin değerine tokeninizi yazın
-    prefix:"$getServerVar[prefix]"//ayarlamalı prefix 
-})
-bot.onMessage()
-var reader = fs.readdirSync("./komutlar/").filter(file => file.endsWith(".js"))
-for(const file of reader) {    
-    const command = require(`./komutlar/${file}`)
-    bot.command({
-        name: command.name,
-        code: command.code,
-        aliases: command.aliases
-    })
-}
+const aoijs = require("aoi.js")
+const bot = new aoijs.Bot({
+token: process.env.token, 
+prefix: "$getServerVar[prefix]", 
+intents: "all" 
+}) 
+
+const loader = new aoijs.LoadCommands(bot)
+loader.load(bot.cmd,"./komutlar/")
 
 ////////// Status \\\\\\\\\\
 bot.status({
@@ -36,23 +29,23 @@ hex:"BLACK"
 bot.joinCommand({
   channel:"$getServerVar[log]",
   code:`
- $author[$userTag;$authorAvatar]
- $description[📥 <@$authorID> Sunucuya katıldı.]
- $footer[ID: $authorID $addTimestamp]
- $thumbnail[$authorAvatar]
- $color[$getServerVar[hex]]
+ $author[1;$userTag;$authorAvatar]
+ $description[1;📥 <@$authorID> Sunucuya katıldı.]
+ $footer[1;ID: $authorID $addTimestamp]
+ $thumbnail[1;$authorAvatar]
+ $color[1;$getServerVar[hex]]
  `
   })
-bot.onJoined()
+bot.onJoin()
 
 bot.leaveCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$userTag;$authorAvatar]
-  $description[📤 <@$authorID> Sunucudan ayrıldı.]
-  $footer[ID: $authotID $addTimestamp]
-  $thumbnail[$authorAvatar]
-  $color[$getServerVar[hex]]
+  $author[1;$userTag;$authorAvatar]
+  $description[1;📤 <@$authorID> Sunucudan ayrıldı.]
+  $footer[1;ID: $authotID $addTimestamp]
+  $thumbnail[1;$authorAvatar]
+  $color[1;$getServerVar[hex]]
   `
   })
 bot.onLeave()
@@ -61,13 +54,13 @@ bot.onLeave()
 bot.banAddCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$userTag;$authorAvatar]
-  $description[🔒 <@$authorID> Sunucudan yasaklandı.
+  $author[1;$userTag;$authorAvatar]
+  $description[1;🔒 <@$authorID> Sunucudan yasaklandı.
   
 Sebep: **$getBanReason[$authorID]**]
-  $footer[ID: $authorID $addTimestamp]
-  $thumbnail[$authorAvatar]
-  $color[$getServerVar[hex]]
+  $footer[1;ID: $authorID $addTimestamp]
+  $thumbnail[1;$authorAvatar]
+  $color[1;$getServerVar[hex]]
   `
   })
 bot.onBanAdd()
@@ -75,11 +68,11 @@ bot.onBanAdd()
 bot.banRemoveCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$userTag;$authorAvatar]
-  $description[🔓 <@$authorID> Yasağı kaldırıldı.]
-  $footer[ID: $authorID $addTimestamp]
-  $thumbnail[$authorAvatar]
-  $color[$getServerVar[hex]]
+  $author[1;$userTag;$authorAvatar]
+  $description[1;🔓 <@$authorID> Yasağı kaldırıldı.]
+  $footer[1;ID: $authorID $addTimestamp]
+  $thumbnail[1;$authorAvatar]
+  $color[1;$getServerVar[hex]]
   `
   })
 bot.onBanRemove()
@@ -88,13 +81,13 @@ bot.onBanRemove()
 bot.deletedCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$userTag;$authorAvatar]
-  $description[🗑️ <@$authorID> Bir mesaj sildi.
+  $author[1;$userTag;$authorAvatar]
+  $description[1;🗑️ <@$authorID> Bir mesaj sildi.
   
 Silinen Mesaj: **$message**]
-$footer[ID: $authorID $addTimestamp]
-$thumbnail[$authorAvatar]
-$color[$getServerVar[hex]]
+$footer[1;ID: $authorID $addTimestamp]
+$thumbnail[1;$authorAvatar]
+$color[1;$getServerVar[hex]]
 `
   })
 bot.onMessageDelete()
@@ -102,15 +95,15 @@ bot.onMessageDelete()
 bot.updateCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$userTag;$authorAvatar]
-  $description[✍🏻 <@$authorID> Bir mesajı düzenledi.
+  $author[1;$userTag;$authorAvatar]
+  $description[1;✍🏻 <@$authorID> Bir mesajı düzenledi.
   
 Eski mesaj: **$oldMessage**
 
 Yeni Mesaj: **$message**]
-$footer[ID: $authorID $addTimestamp]
-$thumbnail[$authorAvatar]
-$color[$getServerVar[hex]]
+$footer[1;ID: $authorID $addTimestamp]
+$thumbnail[1;$authorAvatar]
+$color[1;$getServerVar[hex]]
   `
   })
 bot.onMessageUpdate()
@@ -119,11 +112,11 @@ bot.onMessageUpdate()
 bot.channelCreateCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$newChannel[name];$serverIcon]
-  $description[📌 <#$newChannel[id]> Adlı kanal oluşturuldu.]
-  $footer[ID: $newChannel[id] $addTimestamp]
-  $thumbnail[$serverIcon]
-  $color[$getServerVar[hex]]
+  $author[1;$newChannel[name];$serverIcon]
+  $description[1;📌 <#$newChannel[id]> Adlı kanal oluşturuldu.]
+  $footer[1;ID: $newChannel[id] $addTimestamp]
+  $thumbnail[1;$serverIcon]
+  $color[1;$getServerVar[hex]]
   $onlyIf[$getServerVar[log]!=;]
   `
   })
@@ -132,11 +125,11 @@ bot.onChannelCreate()
 bot.channelDeleteCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$oldChannel[name];$serverIcon]
-  $description[📌 **$newChannel[name]** Adlı kanal silindi.]
-  $footer[$serverName $addTimestamp]
-  $thumbnail[$serverIcon]
-  $color[$getServerVar[hex]]
+  $author[1;$oldChannel[name];$serverIcon]
+  $description[1;📌 **$newChannel[name]** Adlı kanal silindi.]
+  $footer[1;$serverName $addTimestamp]
+  $thumbnail[1;$serverIcon]
+  $color[1;$getServerVar[hex]]
   $onlyIf[$getServerVar[log]!=;]
   `
   })
@@ -146,14 +139,14 @@ bot.onChannelDelete()
 bot.roleCreateCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$newRole[name];$serverIcon]
-  $description[📎 <@&$newRole[id]> Adlı rol oluşturuldu.
+  $author[1;$newRole[name];$serverIcon]
+  $description[1;📎 <@&$newRole[id]> Adlı rol oluşturuldu.
 Rol rengi: **$newRole[hexColor]**
 
 Rol izinleri: **$newRole[permissions]**]
-  $footer[ID: $newRole[id] $addTimestamp]
-  $thumbnail[$serverIcon]
-  $color[$getServerVar[hex]]
+  $footer[1;ID: $newRole[id] $addTimestamp]
+  $thumbnail[1;$serverIcon]
+  $color[1;$getServerVar[hex]]
   `
   })
 bot.onRoleCreate()
@@ -161,11 +154,11 @@ bot.onRoleCreate()
 bot.roleDeleteCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$oldRole[name];$serverIcon]
-  $description[📎 **$oldRole[name]** adlı rol silindi.]
-  $footer[$serverName $addTimestamp]
-  $thumbnail[$serverIcon]
-  $color[$getServerVar[hex]]
+  $author[1;$oldRole[name];$serverIcon]
+  $description[1;📎 **$oldRole[name]** adlı rol silindi.]
+  $footer[1;$serverName $addTimestamp]
+  $thumbnail[1;$serverIcon]
+  $color[1;$getServerVar[hex]]
   `
   })
 bot.onRoleDelete()
@@ -174,15 +167,15 @@ bot.onRoleDelete()
 bot.emojiCreateCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$newEmoji[name];$newEmoji[url]]
-  $description[$newEmoji[emoji] Emojisi eklendi.
+  $author[1;$newEmoji[name];$newEmoji[url]]
+  $description[1;$newEmoji[emoji] Emojisi eklendi.
   
 Emoji adı: **$newEmoji[name]**
 
 Emoji linki: **[Tıkla]($newEmoji[url])**]
-  $footer[ID: $newEmoji[id] $addTimestamp]
-  $thumbnail[$newEmoji[url]]
-  $color[$getServerVar[hex]]
+  $footer[1;ID: $newEmoji[id] $addTimestamp]
+  $thumbnail[1;$newEmoji[url]]
+  $color[1;$getServerVar[hex]]
   `
   })
 bot.onEmojiCreate()
@@ -190,13 +183,13 @@ bot.onEmojiCreate()
 bot.emojiDeleteCommand({
   channel:"$getServerVar[log]",
   code:`
-  $author[$oldEmoji[name];$oldEmoji[url]]
-  $description[**$oldEmoji[name]** Adlı emoji silindi.
+  $author[1;$oldEmoji[name];$oldEmoji[url]]
+  $description[1;**$oldEmoji[name]** Adlı emoji silindi.
 
 Emoji linki: **[Tıkla]($oldEmoji[url])**]
-  $footer[$serverName $addTimestamp]
-  $thumbnail[$oldEmoji[url]]
-  $color[$getServerVar[hex]]
+  $footer[1;$serverName $addTimestamp]
+  $thumbnail[1;$oldEmoji[url]]
+  $color[1;$getServerVar[hex]]
   `
   })
 bot.onEmojiDelete()
@@ -205,11 +198,11 @@ bot.onEmojiDelete()
 bot.voiceStateUpdateCommand({
   channel:"$getServerVar[log]",
   code:`
-$author[$newState[id];$userAvatar[$newState[id]]]
-$description[**$newState[id]** adlı kullanıcı <#$newState[channelID]> adlı ses kanalına giriş yaptı.]
-$footer[ID: $newState[id] $addTimestamp]
-$thumbnail[$userAvatar[$newState[id]]]
-$color[$getServerVar[hex]]
+$author[1;$newState[id];$userAvatar[$newState[id]]]
+$description[1;**$newState[id]** adlı kullanıcı <#$newState[channelID]> adlı ses kanalına giriş yaptı.]
+$footer[1;ID: $newState[id] $addTimestamp]
+$thumbnail[1;$userAvatar[$newState[id]]]
+$color[1;$getServerVar[hex]]
 $onlyIf[$newState[channelID]!=;]
 $onlyIf[$newState[channelID]==;]
 `
@@ -218,11 +211,11 @@ $onlyIf[$newState[channelID]==;]
 bot.voiceStateUpdateCommand({
   channel:"$getServerVar[log]",
   code:`
-$author[$newState[id];$userAvatar[$newState[id]]]
-$description[**$newState[id]** adlı kullanıcı <#$newState[channelID]> adlı ses kanalından çıkış yaptı.]
-$footer[ID: $newState[id] $addTimestamp]
-$thumbnail[$userAvatar[$newState[id]]]
-$color[$getServerVar[hex]]
+$author[1;$newState[id];$userAvatar[$newState[id]]]
+$description[1;**$newState[id]** adlı kullanıcı <#$newState[channelID]> adlı ses kanalından çıkış yaptı.]
+$footer[1;ID: $newState[id] $addTimestamp]
+$thumbnail[1;$userAvatar[$newState[id]]]
+$color[1;$getServerVar[hex]]
 $onlyIf[$newState[channelID]==;]
 $onlyIf[$newState[channelID]!=;]
 `
